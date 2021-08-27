@@ -13,7 +13,7 @@ export default class Cpf {
     MAX_DIGITS_1 = 9;
     MAX_DIGITS_2 = 10;
 
-    validate(cpf = "") {
+    validate(cpf = ""): boolean {
         cpf = this.extractDigits(cpf);
 
         if (this.isInvalidLength(cpf))
@@ -29,20 +29,20 @@ export default class Cpf {
         return this.getCheckDigit(cpf) == calculatedCheckDigit;
     }
 
-    extractDigits(cpf: string) {
+    private extractDigits(cpf: string): string {
         return cpf.replace(/\D/g, "");
     }
 
-    isInvalidLength(cpf: string) {
+    private isInvalidLength(cpf: string): boolean {
         return cpf.length !== 11;
     }
 
-    isBlocked(cpf: string) {
+    private isBlocked(cpf: string): boolean {
         const [digit1] = cpf;
         return cpf.split("").every(digit => digit === digit1);
     }
 
-    calculateDigit(cpf: string, factor: number, max: number) {
+    private calculateDigit(cpf: string, factor: number, max: number): number {
         let total = 0;
         for (const digit of this.toDigitArray(cpf).slice(0, max)) {
             total += digit * factor--;
@@ -50,11 +50,11 @@ export default class Cpf {
         return (total % 11 < 2) ? 0 : (11 - total % 11);
     }
 
-    toDigitArray(cpf: string) {
+    private toDigitArray(cpf: string): number[] {
         return [...cpf].map(digit => parseInt(digit));
     }
 
-    getCheckDigit(cpf: string) {
+    private getCheckDigit(cpf: string): string {
         return cpf.slice(9);
     }
 }
